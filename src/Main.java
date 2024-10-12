@@ -15,21 +15,23 @@ public class Main {
 
         String flowLogDataPath = "/Users/admin/Desktop/flow_logs";
         String tagsDataPath = "/Users/admin/Desktop/tags";
-        String protocolsDataPath = "/src/protocol_numbers";
+        String protocolsDataPath = "src/protocol_numbers";
 
         tagsCount = new HashMap<>();
         destPortProtocolMappingCount = new HashMap<>();
         protocolNumberMappings = new HashMap<>();
 
         protocolNumberMappings = loadProtocolNumber(protocolsDataPath);
+
         tagMap = parseTagFile(tagsDataPath);
+
         parseFlowLog(flowLogDataPath);
 
-        System.out.println("Tag,Count");
-        System.out.println(tagsCount);
+        System.out.println("Tag Counts: ");
+        printTagCounts(tagsCount);
 
-        System.out.println("dstport,protocol,tag ");
-        System.out.println(destPortProtocolMappingCount);
+        System.out.println("Port/Protocol Combination Counts: ");
+        printPortProtocolMappingCounts(destPortProtocolMappingCount);
 
     }
 
@@ -59,11 +61,13 @@ public class Main {
                 String destPort = filteredTokens.get(6);
                 String protocol = protocolNumberMappings.get(filteredTokens.get(7));
 
+
                 // if we receive a protocol that is not defined by IANA, throw it under this unprocessed list for debugging.
                 if(protocol==null){
                     unProcessedFlowLogs.add(tokens);
                     continue;
                 }
+
 
                 if( destPort.equals("-") || protocol.equals("-")) {
                     unProcessedFlowLogs.add(tokens);
@@ -90,7 +94,7 @@ public class Main {
                     destPortProtocolMappingCount.put(destPort, protocolNumberMap);
 
                 }else{
-                    destPortProtocolMappingCount.put(destPort, Map.of(protocol, 1));
+                    destPortProtocolMappingCount.put(destPort, new HashMap<>(Map.of(protocol, 1)));
                 }
 
             }
@@ -131,7 +135,7 @@ public class Main {
                 if(tagMap.containsKey(port)){
                     tagMap.get(port).put(protocol, tag);
                 }else{
-                    tagMap.put(port, Map.of(protocol, tag));
+                    tagMap.put(port, new HashMap<>(Map.of(protocol, tag)));
                 }
 
             }
@@ -173,6 +177,23 @@ public class Main {
             e.printStackTrace();
         }
         return protocolNumbers;
+    }
+
+    static void printTagCounts(Map<String, Integer> tagsCount) {
+        System.out.println("TAG, \t\t" + "COUNT");
+        for(String tag : tagsCount.keySet()) {
+            System.out.println(tag +", \t\t" + tagsCount.get(tag));
+        }
+        System.out.println("\n\n");
+    }
+
+    static void printPortProtocolMappingCounts(Map<String, Map<String, Integer>> destPortProtocolMappingCount) {
+        System.out.println("PORT, \t" + "PROTOCOL, \t"+"COUNT");
+        for(String port : destPortProtocolMappingCount.keySet()) {
+            for(String protocol :destPortProtocolMappingCount.get(port).keySet() ) {
+                System.out.println(port +", \t" + protocol + ", \t\t" + destPortProtocolMappingCount.get(port).get(protocol));
+            }
+        }
     }
 
 }
