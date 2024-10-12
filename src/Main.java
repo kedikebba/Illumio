@@ -51,7 +51,7 @@ public class Main {
                         .filter(token -> !token.equals("null"))
                         .toList();
 
-                if(filteredTokens.size()<14){
+                if(filteredTokens.size()!=14){
                     unProcessedFlowLogs.add(tokens);
                     continue;
                 }
@@ -119,7 +119,7 @@ public class Main {
                         .filter(token -> !token.equals("null")) // manually removing tokens labelled as "null"
                         .toList();
 
-                if(filteredTokens.size()<3){
+                if(filteredTokens.size()!=3){
                     unProcessedMappings.add(tokens);
                     continue;
                 }
