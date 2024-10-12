@@ -27,7 +27,7 @@ To start using this project use the following commands:
 The following assumptions have been made prior to attempting this and the same have been used throughout the entire project. 
 
 1. The assumed format of of the flow logs is a custom format with the following fields in their order at the respective indices. The numbers against them are their positions with `0-Indexed ` format.
-```json
+```
 version - 0
 account-id - 1
 interface-id -2
@@ -49,7 +49,7 @@ log-status - 13
 3. Null, Empty, Blank log entries have as well been excluded. 
 4. The Decimal representation of protocols has been extracted from [here](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml) and any number that in the flow logs that does not have a representation here has been ingnored for translation. 
 5. The tag file for mapping a tag onto the destPort + Protocol has been assumed to contain only three fields. Any length that is not equal to this will be ignored as it will seen as malfunctioned entry. And the entries will have the following fields in their order.  
-```json
+```
 dstport - 0,
 protocol - 1,
 tag - 2
